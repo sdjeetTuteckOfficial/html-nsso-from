@@ -4,88 +4,302 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NSSO CAPX</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f9f9f9;
+      }
+
+      h2 {
+        color: #333;
+        text-align: center;
+      }
+
+      #form_container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      label {
+        font-weight: bold;
+        margin: 10px 0 5px;
+      }
+
+      input {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .error {
+        color: red;
+        display: none;
+        font-size: 14px;
+      }
+
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
   </head>
   <body>
-    <h2>Sign Up for Updates</h2>
+    <h2>NSSO CapEX from</h2>
     <div id="form_container"></div>
 
     <script>
-      // Array of objects defining the form fields
-      const formFields = [
-        {
-          label: 'Name',
-          inputType: 'text',
-          name: 'name',
-          validation: {
-            required: true,
-            errorMessage: 'Name is required.',
-          },
-        },
-        {
-          label: 'Email',
-          inputType: 'email',
-          name: 'email',
-          validation: {
-            required: true,
-            errorMessage: 'Email is required.',
-          },
-        },
-      ];
-
-      const formData = {};
-
-      // Generate form dynamically based on formFields array
       const formContainer = document.getElementById('form_container');
-      const formElement = document.createElement('form');
-      formElement.id = 'signupForm';
-      formElement.method = 'GET';
 
-      formFields.forEach((field) => {
-        // Create label
-        const label = document.createElement('label');
-        label.setAttribute('for', field.name);
-        label.innerText = `${field.label}:`;
-        formElement.appendChild(label);
-        formElement.appendChild(document.createElement('br'));
+      // Define the form JSON with default empty values
+      const formJSON = {
+        questions: [
+          {
+            id: 'question_1',
+            label: 'Identification Details',
+            fields: [
+              {
+                label: 'CIN Number',
+                inputType: 'text',
+                name: 'cin_number',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'CIN Number is required.',
+                },
+              },
+              {
+                label: 'Legal Name',
+                inputType: 'text',
+                name: 'legal_name',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Legal Name is required.',
+                },
+              },
+              {
+                label: 'Operating Name',
+                inputType: 'text',
+                name: 'operating_name',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Operating Name is required.',
+                },
+              },
+              {
+                label: 'Company Address',
+                inputType: 'text',
+                name: 'company_address',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Company Address is required.',
+                },
+              },
+              {
+                label: 'Email',
+                inputType: 'email',
+                name: 'email',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Email is required.',
+                },
+              },
+              {
+                label: 'GST',
+                inputType: 'text',
+                name: 'gst',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'GST is required.',
+                },
+              },
+            ],
+          },
+          {
+            id: 'question_2',
+            label: 'Person for Questionnaire',
+            fields: [
+              {
+                label: 'First Name',
+                inputType: 'text',
+                name: 'first_name',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'First Name is required.',
+                },
+              },
+              {
+                label: 'Last Name',
+                inputType: 'text',
+                name: 'last_name',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Last Name is required.',
+                },
+              },
+              {
+                label: 'Designation',
+                inputType: 'text',
+                name: 'designation',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Designation is required.',
+                },
+              },
+              {
+                label: 'Email',
+                inputType: 'email',
+                name: 'person_email',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Email is required.',
+                },
+              },
+              {
+                label: 'Postal Address',
+                inputType: 'text',
+                name: 'postal_address',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Postal Address is required.',
+                },
+              },
+              {
+                label: 'Mobile Number',
+                inputType: 'tel',
+                name: 'mobile_number',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Mobile Number is required.',
+                },
+              },
+              {
+                label: 'Telephone Number',
+                inputType: 'tel',
+                name: 'telephone_number',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Telephone Number is required.',
+                },
+              },
+            ],
+          },
+        ],
+      };
 
-        // Create input
-        const input = document.createElement('input');
-        input.type = field.inputType;
-        input.id = field.name;
-        input.name = field.name;
-        formElement.appendChild(input);
-        formElement.appendChild(document.createElement('br'));
-        formElement.appendChild(document.createElement('br'));
+      let currentQuestionIndex = 0;
 
-        // Create error message span
-        const errorSpan = document.createElement('span');
-        errorSpan.id = `${field.name}Error`;
-        errorSpan.style.color = 'red';
-        errorSpan.style.display = 'none';
-        errorSpan.innerText = field.validation.errorMessage;
-        formElement.appendChild(errorSpan);
-        formElement.appendChild(document.createElement('br'));
-      });
+      function createForm(question) {
+        formContainer.innerHTML = '';
 
-      // Create submit button
-      const submitButton = document.createElement('input');
-      submitButton.type = 'submit';
-      submitButton.value = 'Submit';
-      formElement.appendChild(submitButton);
+        const formElement = document.createElement('form');
+        formElement.id = 'signupForm';
+        formElement.method = 'GET';
 
-      // Append the form to the container
-      formContainer.appendChild(formElement);
+        const questionLabel = document.createElement('h3');
+        questionLabel.innerText = question.label;
+        formElement.appendChild(questionLabel);
 
-      // Form submission handler
-      formElement.addEventListener('submit', function (event) {
-        event.preventDefault();
+        question.fields.forEach((field) => {
+          const label = document.createElement('label');
+          label.setAttribute('for', field.name);
+          label.innerText = `${field.label}:`;
+          formElement.appendChild(label);
 
+          const input = document.createElement('input');
+          input.type = field.inputType;
+          input.id = field.name;
+          input.name = field.name;
+          input.value = field.value; // Restore saved data
+          formElement.appendChild(input);
+
+          const errorSpan = document.createElement('span');
+          errorSpan.id = `${field.name}Error`;
+          errorSpan.className = 'error';
+          errorSpan.innerText = field.validation.errorMessage;
+          formElement.appendChild(errorSpan);
+        });
+
+        const navigationButtons = document.createElement('div');
+        navigationButtons.className = 'button-container';
+
+        const prevButton = document.createElement('button');
+        prevButton.type = 'button';
+        prevButton.innerText = 'Back';
+        prevButton.addEventListener('click', function () {
+          saveFormData();
+          if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            createForm(formJSON.questions[currentQuestionIndex]);
+          }
+        });
+        navigationButtons.appendChild(prevButton);
+
+        const nextButton = document.createElement('button');
+        nextButton.type = 'button';
+        nextButton.innerText = 'Next';
+        nextButton.addEventListener('click', function () {
+          if (validateForm(question)) {
+            saveFormData();
+            if (currentQuestionIndex < formJSON.questions.length - 1) {
+              currentQuestionIndex++;
+              createForm(formJSON.questions[currentQuestionIndex]);
+            } else {
+              handleFormSubmission();
+            }
+          }
+        });
+        navigationButtons.appendChild(nextButton);
+
+        formElement.appendChild(navigationButtons);
+        formContainer.appendChild(formElement);
+      }
+
+      function validateForm(question) {
         let isValid = true;
-
-        formFields.forEach((field) => {
+        question.fields.forEach((field) => {
           const value = document.getElementById(field.name).value;
-          formData[field.name] = value;
-
           if (field.validation.required && !value) {
             document.getElementById(`${field.name}Error`).style.display =
               'block';
@@ -95,20 +309,28 @@
               'none';
           }
         });
+        return isValid;
+      }
 
-        if (isValid) {
-          // Convert formData to a JSON string and format it for the mail body
-          const jsonData = JSON.stringify(formData, null, 2);
+      function saveFormData() {
+        const currentFields = formJSON.questions[currentQuestionIndex].fields;
+        currentFields.forEach((field) => {
+          const value = document.getElementById(field.name).value;
+          field.value = value; // Update JSON object with new values
+        });
+      }
 
-          // Construct the mailto link
-          const mailtoLink = `mailto:shubhajeet.das@tuteck.com?subject=Signup Form&body=${encodeURIComponent(
-            jsonData
-          )}`;
+      function handleFormSubmission() {
+        const jsonData = JSON.stringify(formJSON, null, 2);
+        console.log('Form Data:', jsonData);
+        const mailtoLink = `mailto:shubhajeet.das@tuteck.com?subject=Signup Form&body=${encodeURIComponent(
+          jsonData
+        )}`;
+        window.location.href = mailtoLink;
+      }
 
-          // Redirect to the mailto link
-          window.location.href = mailtoLink;
-        }
-      });
+      // Initialize the form with the first question
+      createForm(formJSON.questions[currentQuestionIndex]);
     </script>
   </body>
 </html>
