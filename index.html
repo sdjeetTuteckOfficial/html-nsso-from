@@ -74,7 +74,7 @@
     </style>
   </head>
   <body>
-    <h2>NSSO CapEX from</h2>
+    <h2>NSSO CapEX Form</h2>
     <div id="form_container"></div>
 
     <script>
@@ -322,11 +322,25 @@
 
       function handleFormSubmission() {
         const jsonData = JSON.stringify(formJSON, null, 2);
-        console.log('Form Data:', jsonData);
-        const mailtoLink = `mailto:shubhajeet.das@tuteck.com?subject=Signup Form&body=${encodeURIComponent(
-          jsonData
-        )}`;
-        window.location.href = mailtoLink;
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        // Create a link to download the JSON file
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'formData.json';
+        a.textContent = 'Download Form Data';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // Create a mailto link
+        const email = 'shubhajeet.das@tuteck.com';
+        const subject = 'Form Submission';
+        const body = `Please find the attached form data.`;
+        window.location.href = `mailto:${email}?subject=${encodeURIComponent(
+          subject
+        )}&body=${encodeURIComponent(body)}`;
       }
 
       // Initialize the form with the first question
