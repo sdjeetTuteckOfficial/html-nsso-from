@@ -158,6 +158,7 @@
                 },
               },
             ],
+            next: 'question_2',
           },
           {
             id: 'question_2',
@@ -234,6 +235,8 @@
                 },
               },
             ],
+            next: 'question_3',
+            prev: 'question_1',
           },
           {
             id: 'question_3',
@@ -254,6 +257,26 @@
                 },
               },
             ],
+            next: { yes: 'question_3.1', no: 'question_4' },
+            prev: 'question_2',
+          },
+          {
+            id: 'question_3.1',
+            label: 'Dummy Question 3.1',
+            fields: [
+              {
+                label: 'Answer',
+                inputType: 'text',
+                name: 'dummy_answer',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Answer is required.',
+                },
+              },
+            ],
+            next: 'question_4',
+            prev: 'question_3',
           },
           {
             id: 'question_4',
@@ -277,13 +300,18 @@
                 },
               },
             ],
+            prev: 'question_3',
+            next: null,
           },
         ],
       };
 
-      let currentQuestionIndex = 0;
+      let currentQuestionId = 'question_1';
 
-      function createForm(question) {
+      function createForm(questionId) {
+        const question = formJSON.questions.find((q) => q.id === questionId);
+        if (!question) return;
+
         const formContainer = document.getElementById('formContainer');
         formContainer.innerHTML = '';
 
@@ -292,9 +320,7 @@
         formElement.method = 'GET';
 
         const questionLabel = document.createElement('h3');
-        questionLabel.innerText = `Question ${currentQuestionIndex + 1}: ${
-          question.label
-        }`;
+        questionLabel.innerText = question.label;
         formElement.appendChild(questionLabel);
 
         question.fields.forEach((field) => {
@@ -346,11 +372,12 @@
         const prevButton = document.createElement('button');
         prevButton.type = 'button';
         prevButton.innerText = 'Back';
+        prevButton.disabled = !question.prev;
         prevButton.addEventListener('click', function () {
           saveFormData();
-          if (currentQuestionIndex > 0) {
-            currentQuestionIndex--;
-            createForm(formJSON.questions[currentQuestionIndex]);
+          if (question.prev) {
+            currentQuestionId = question.prev;
+            createForm(currentQuestionId);
           }
         });
         navigationButtons.appendChild(prevButton);
@@ -361,11 +388,21 @@
         nextButton.addEventListener('click', function () {
           if (validateForm()) {
             saveFormData();
-            if (currentQuestionIndex < formJSON.questions.length - 1) {
-              currentQuestionIndex++;
-              createForm(formJSON.questions[currentQuestionIndex]);
-            } else {
-              downloadJSONFile();
+            if (question.next) {
+              if (typeof question.next === 'object') {
+                const operationalStatus = document.querySelector(
+                  '[name="operational_status"]:checked'
+                )?.value;
+                currentQuestionId =
+                  question.next[operationalStatus] || 'question_4';
+              } else {
+                currentQuestionId = question.next;
+              }
+              if (currentQuestionId === null) {
+                downloadJSONFile();
+              } else {
+                createForm(currentQuestionId);
+              }
             }
           }
         });
@@ -377,62 +414,68 @@
 
       function saveFormData() {
         const formElement = document.getElementById('signupForm');
-        formJSON.questions[currentQuestionIndex].fields.forEach((field) => {
-          const input = formElement.querySelector(`[name="${field.name}"]`);
-          if (input) {
-            if (input.type === 'checkbox') {
-              field.value = Array.from(
-                formElement.querySelectorAll(`[name="${field.name}"]:checked`)
-              ).map((el) => el.value);
-            } else if (input.type === 'radio') {
-              field.value =
-                formElement.querySelector(`[name="${field.name}"]:checked`)
-                  ?.value || '';
-            } else {
-              field.value = input.value;
+        formJSON.questions
+          .find((q) => q.id === currentQuestionId)
+          .fields.forEach((field) => {
+            const input = formElement.querySelector(`[name="${field.name}"]`);
+            if (input) {
+              if (input.type === 'checkbox') {
+                field.value = Array.from(
+                  formElement.querySelectorAll(`[name="${field.name}"]:checked`)
+                ).map((el) => el.value);
+              } else if (input.type === 'radio') {
+                field.value =
+                  formElement.querySelector(`[name="${field.name}"]:checked`)
+                    ?.value || '';
+              } else {
+                field.value = input.value;
+              }
             }
-          }
-        });
+          });
       }
 
       function validateForm() {
         let isValid = true;
         const formElement = document.getElementById('signupForm');
 
-        formJSON.questions[currentQuestionIndex].fields.forEach((field) => {
-          const inputs = formElement.querySelectorAll(`[name="${field.name}"]`);
-          const errorSpan = document.getElementById(`${field.name}Error`);
+        formJSON.questions
+          .find((q) => q.id === currentQuestionId)
+          .fields.forEach((field) => {
+            const inputs = formElement.querySelectorAll(
+              `[name="${field.name}"]`
+            );
+            const errorSpan = document.getElementById(`${field.name}Error`);
 
-          if (field.validation.required) {
-            if (field.inputType === 'checkbox') {
-              const checkedCount = formElement.querySelectorAll(
-                `[name="${field.name}"]:checked`
-              ).length;
-              if (checkedCount === 0) {
-                errorSpan.style.display = 'block';
-                isValid = false;
+            if (field.validation.required) {
+              if (field.inputType === 'checkbox') {
+                const checkedCount = formElement.querySelectorAll(
+                  `[name="${field.name}"]:checked`
+                ).length;
+                if (checkedCount === 0) {
+                  errorSpan.style.display = 'block';
+                  isValid = false;
+                } else {
+                  errorSpan.style.display = 'none';
+                }
+              } else if (field.inputType === 'radio') {
+                if (
+                  !formElement.querySelector(`[name="${field.name}"]:checked`)
+                ) {
+                  errorSpan.style.display = 'block';
+                  isValid = false;
+                } else {
+                  errorSpan.style.display = 'none';
+                }
               } else {
-                errorSpan.style.display = 'none';
-              }
-            } else if (field.inputType === 'radio') {
-              if (
-                !formElement.querySelector(`[name="${field.name}"]:checked`)
-              ) {
-                errorSpan.style.display = 'block';
-                isValid = false;
-              } else {
-                errorSpan.style.display = 'none';
-              }
-            } else {
-              if (!inputs[0]?.value) {
-                errorSpan.style.display = 'block';
-                isValid = false;
-              } else {
-                errorSpan.style.display = 'none';
+                if (!inputs[0]?.value) {
+                  errorSpan.style.display = 'block';
+                  isValid = false;
+                } else {
+                  errorSpan.style.display = 'none';
+                }
               }
             }
-          }
-        });
+          });
 
         return isValid;
       }
@@ -450,7 +493,7 @@
         document.body.removeChild(a);
       }
 
-      createForm(formJSON.questions[currentQuestionIndex]);
+      createForm(currentQuestionId);
     </script>
   </body>
 </html>
