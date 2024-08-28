@@ -306,6 +306,10 @@
             next: {
               seasonal_operations: 'question_3_1_1',
               ceased_operations: 'question_3_1_2',
+              sold_operations: 'question_3_1_3',
+              amalgamated_operations: 'question_3_1_4',
+              temporarily_inactive: 'question_3_1_5',
+              other_reasons: 'question_3_1_6',
             },
           },
           {
@@ -313,18 +317,262 @@
             label: 'Details of Strike off Operations',
             fields: [
               {
-                label: 'When did the enterprise strike off happen?',
+                label: 'When did the enterprise cease operations?',
                 inputType: 'date',
-                name: 'strike_off_date',
+                name: 'cease_date',
                 value: '',
                 validation: {
                   required: true,
                   errorMessage: 'Cease date is required.',
                 },
               },
+              {
+                label: 'Why did the enterprise cease operations?',
+                inputType: 'checkbox',
+                name: 'cease_reasons',
+                options: [
+                  { label: 'Bankruptcy', value: 'bankruptcy' },
+                  { label: 'Liquidation', value: 'liquidation' },
+                  { label: 'Dissolution', value: 'dissolution' },
+                  { label: 'Other', value: 'other' },
+                ],
+                value: [],
+                validation: {
+                  required: true,
+                  errorMessage: 'Please select at least one reason.',
+                },
+              },
+              {
+                label: 'If other, please specify (max 250 characters)',
+                inputType: 'text',
+                name: 'other_reason',
+                value: '',
+                validation: {
+                  required: false,
+                  maxLength: 250,
+                  errorMessage: 'Maximum 250 characters allowed.',
+                },
+              },
             ],
             prev: 'question_3_1',
             next: 'question_4',
+          },
+          {
+            id: 'question_3_1_2',
+            label: 'Details of Strike off Operations',
+            fields: [
+              {
+                label: 'When did the enterprise cease operations?',
+                inputType: 'date',
+                name: 'cease_date',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Cease date is required.',
+                },
+              },
+              {
+                label: 'Why did the enterprise cease operations?',
+                inputType: 'checkbox',
+                name: 'cease_reasons',
+                options: [
+                  { label: 'Bankruptcy', value: 'bankruptcy' },
+                  { label: 'Liquidation', value: 'liquidation' },
+                  { label: 'Dissolution', value: 'dissolution' },
+                  { label: 'Other', value: 'other' },
+                ],
+                value: [],
+                validation: {
+                  required: true,
+                  errorMessage: 'Please select at least one reason.',
+                },
+              },
+              {
+                label: 'If other, please specify (max 250 characters)',
+                inputType: 'text',
+                name: 'other_reason',
+                value: '',
+                validation: {
+                  required: false,
+                  maxLength: 250,
+                  errorMessage: 'Maximum 250 characters allowed.',
+                },
+              },
+            ],
+            prev: 'question_3_1',
+            next: 'question_4',
+          },
+          {
+            id: 'question_3_1_3',
+            label: 'Details of Sold Operations',
+            fields: [
+              {
+                label: 'When was this enterprise sold?',
+                inputType: 'date',
+                name: 'sale_date',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Sale date is required.',
+                },
+              },
+              {
+                label: 'What is the CIN of the buyer?',
+                inputType: 'text',
+                name: 'buyer_cin',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Buyer CIN is required.',
+                },
+              },
+              {
+                label: 'What is the legal name of the buyer?',
+                inputType: 'text',
+                name: 'buyer_legal_name',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Buyer legal name is required.',
+                },
+              },
+            ],
+            prev: 'question_3_1',
+            next: 'question_4',
+          },
+          {
+            id: 'question_3_1_4',
+            label: 'Details of Amalgamation',
+            fields: [
+              {
+                label: 'When did this enterprise amalgamate?',
+                inputType: 'date',
+                name: 'amalgamation_date',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Amalgamation date is required.',
+                },
+              },
+              {
+                label:
+                  'What is the CIN of the resulting or continuing enterprise?',
+                inputType: 'text',
+                name: 'resulting_enterprise_cin',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'CIN of resulting enterprise is required.',
+                },
+              },
+              {
+                label:
+                  'What is the legal name of the resulting or continuing enterprise?',
+                inputType: 'text',
+                name: 'resulting_enterprise_legal_name',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage:
+                    'Legal name of resulting enterprise is required.',
+                },
+              },
+              {
+                label:
+                  'What are the CINs of other enterprises amalgamated with the resulting or continuing enterprise?',
+                inputType: 'text',
+                name: 'amalgamated_enterprise_cins',
+                value: '',
+                validation: {
+                  required: false,
+                  errorMessage:
+                    'CINs of other amalgamated enterprises (if any).',
+                },
+              },
+              {
+                label:
+                  'What are the legal names of other enterprises amalgamated with the resulting or continuing enterprise?',
+                inputType: 'text',
+                name: 'amalgamated_enterprise_names',
+                value: '',
+                validation: {
+                  required: false,
+                  errorMessage:
+                    'Legal names of other amalgamated enterprises (if any).',
+                },
+              },
+            ],
+            prev: 'question_3_1',
+            next: 'question_4',
+          },
+          {
+            id: 'question_3_1_5',
+            label: 'Temporarily Inactive but Expected to Reopen',
+            fields: [
+              {
+                label: 'When did this enterprise become temporarily inactive?',
+                inputType: 'date',
+                name: 'inactive_since',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage:
+                    'Date when the enterprise became temporarily inactive is required.',
+                },
+              },
+              {
+                label: 'When does this enterprise expect to resume operations?',
+                inputType: 'date',
+                name: 'resume_operations',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage:
+                    'Expected date to resume operations is required.',
+                },
+              },
+              {
+                label: 'Why is this enterprise temporarily inactive?',
+                inputType: 'text',
+                name: 'reason_inactive',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Reason for temporary inactivity is required.',
+                },
+              },
+            ],
+            prev: 'question_3_1',
+            next: 'question_4',
+          },
+          {
+            id: 'question_3_1_6',
+            label: 'No Longer Operational Due to Other Reasons',
+            fields: [
+              {
+                label: 'When did this enterprise stop operations?',
+                inputType: 'date',
+                name: 'stop_operations_date',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage:
+                    'Date when the enterprise stopped operations is required.',
+                },
+              },
+              {
+                label: 'Why did this enterprise stop operations?',
+                inputType: 'text',
+                name: 'reason_stop_operations',
+                value: '',
+                validation: {
+                  required: true,
+                  errorMessage: 'Reason for stopping operations is required.',
+                },
+              },
+            ],
+            prev: 'question_3_1',
+            next: 'question_4', // Update the next question ID or endpoint
           },
           {
             id: 'question_3_1_1',
